@@ -1,6 +1,6 @@
 # pcc-life-expectancy
 
-A QUICK experiment using some open data sets from Plymouth City Council to show life expectancy by neighbourhood over the years the dats is available.
+A QUICK experiment using some open data sets from Plymouth City Council to show life expectancy by neighbourhood over the years the data is available.
  
 If I have time, I might expand on it and add some charts or somesuch.
 
