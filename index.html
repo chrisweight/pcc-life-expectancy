@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+
+    <title>Plymouth, Devon - Life Expectancy by Neighbourhood</title>
+
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./node_modules/rangeslider.js/dist/rangeslider.css">
+</head>
+
+<body>
+
+<div id="preloader">
+    <div class="inner">
+        <h1>LOADING!</h1>
+    </div>
+</div>
+
+<div id="map"></div>
+
+<div id="title">
+    <h3>Plymouth, Devon</h3>
+    <h4>Life Expectancy by Neighbourhood</h4>
+    <p>
+        Use the slider in the top-right to view statistics for different years.
+        <br>
+        On the map, areas shaded red are of a shorter life expectancy, green is longer.
+        <br>
+        Values are calculated by year.
+    </p>
+</div>
+
+<div id="neighbourhood"></div>
+
+<div id="controls">
+    <input type="range" id="life-expectancy-year">
+    <div id="selected-year">2012-14</div>
+</div>
+
+<script type="text/javascript">
+
+    var plymouth = {
+        center: {
+            lat: 50.368,
+            lng: -4.126
+        },
+        zoom: 13,
+        disableDefaultUI: true
+    };
+
+    var leData = {},
+            years = [];
+
+    function initControls(map) {
+        // Setup overlays
+        //
+        var neighbourhoodDiv = document.getElementById('neighbourhood'),
+                controlsDiv = document.getElementById('controls'),
+                titleDiv = document.getElementById('title');
+
+        map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(neighbourhoodDiv);
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlsDiv);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(titleDiv);
+
+        // Setup map layer listeners
+        //
+        var mouseMove = function (event) {
+            neighbourhoodDiv.textContent = event.feature.f.NAME + " - " + event.feature.f.life_expectancy + " years";
+        };
+
+        var mouseOver = function (event) {
+            map.data.revertStyle();
+            map.data.overrideStyle(event.feature, {
+                fillOpacity: .65
+            });
+        };
+
+        var mouseOut = function (event) {
+            map.data.revertStyle(event.feature);
+        };
+
+        map.data.addListener('mousemove', mouseMove);
+        map.data.addListener('mouseover', mouseOver);
+        map.data.addListener('mouseout', mouseOut);
+
+        // Setup slider
+        //
+        var onSlide = function (event) {
+            utils.updateLifeExpectancy(leData, map, years[event.currentTarget.value]);
+            $('#selected-year').text(years[event.currentTarget.value]);
+        };
+
+        $('#life-expectancy-year').prop('min', 0);
+        $('#life-expectancy-year').prop('max', years.length - 1);
+
+        $('#life-expectancy-year').on('input', onSlide);
+        $('#life-expectancy-year').on('change', onSlide);
+
+        $('#life-expectancy-year').val(years.length - 1).change();
+    }
+
+    function initMap() {
+        var map = new google.maps.Map(
+                document.getElementById('map'),
+                plymouth
+        );
+
+        map.data.loadGeoJson('./data/geojson/pcc_neighbourhoods_wgs84.geojson', {
+            idPropertyName: 'NAME'
+        }, function () {
+            $.getJSON('./data/pcc_life_expectancy.json', function (data) {
+
+                leData = data;
+                years = utils.parseYears(data[0]);
+                utils.updateLifeExpectancy(data, map, '2012-14');
+                initControls(map);
+
+                $('#preloader').css('display', 'none');
+            });
+        });
+    }
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtV0P7z1dEIYlZzeI6EMuphn6m_PYWM4I&libraries=geometry,visualization&callback=initMap"></script>
+<script src="./node_modules/rangeslider.js/dist/rangeslider.min.js"></script>
+<script src="./js/utils.js"></script>
+
+</body>
+
+</html>

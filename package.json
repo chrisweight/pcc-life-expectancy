@@ -1,0 +1,12 @@
+{
+  "name": "pcc-lifexpectancy",
+  "version": "1.0.0",
+  "description": "Simple Google Maps API driven visualisation of PCC life expectancy data by neighbourhood",
+  "main": "index.html",
+  "scripts": {},
+  "author": "Chris Weight <chris@chrisweight.com>",
+  "license": "ISC",
+  "dependencies": {
+    "rangeslider.js": "^2.1.1"
+  }
+}

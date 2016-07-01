@@ -1,0 +1,73 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial;
+    overflow: hidden;
+}
+
+#preloader {
+    position: fixed;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: black;
+    opacity: .5;
+    text-align: center;
+    color: white;
+}
+
+#preloader .inner {
+    position: absolute;
+    top:50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#map {
+    height: 100%;
+}
+
+#neighbourhood,
+#controls,
+#title {
+    background-color: darkslategrey;
+    color: white;
+    padding: 15px;
+    min-width: 250px;
+    text-align: center;
+    margin: 5px;
+    border: 2px solid #fff;
+
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px;
+
+    -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+    -moz-box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .3);
+}
+
+#controls {
+    padding: 5px;
+    max-width: 400px;
+}
+
+#controls input[type='range'] {
+    width: 100%;
+    margin-left: 0; /* for FF */
+}
+
+#title {
+    text-align: left;
+}
+
+#title h4 {
+    margin-top: -8px;
+}
